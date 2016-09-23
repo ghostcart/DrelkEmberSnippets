@@ -55,13 +55,27 @@ PAUSE Toggles to a paused state, allowing looting and other activities.
 All syntax is given by appending help to any of the commands.
 
 
-TO INSTALL
+##TO INSTALL
+
+
 Download the file.
+
+
 Open the session you wish to use it in.
+
+
 Open Settings.
+
+
 Select File-> Import from XML.
+
+
 Navigate to the file and select it.
+
+
 Wait a few seconds.
+
+
 Viola!
 
 I'll pretty up with pictures if people have trouble.
