@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<cmud>
+  <class name="RepeatCommand">
+    <alias name="repstop">
+      <value>#SAY Stopping repeat function. Please wait.
+</value>
+    </alias>
+    <alias name="repeat">
+      <value>#SW (%1 == "help") {#EXEC rephelp} 
+  (%match(%1, %d.%d) || %match(%1, %d)) {
+#SAY "Now repeating "%-2" every "%1" seconds."
+#SAY "To end, type repstop. To alter, type repchange. "
+#UNTIL (%lastinput == "repstop") 
+{
+#IF (@pauserepeat == true)
+{
+#WA (1000*%1+ 300)
+} {
+#exec %-2
+#WA (1000*%1+ 300)
+}
+}
+#SAY Repeatcommand stopped.
+} (1) {#SAY Please use syntaxt REPEAT TIME COMMAND}</value>
+    </alias>
+    <trigger priority="38370">
+      <pattern>^Who do you want to attack?</pattern>
+      <value>#IF (@pauserepeat == false) {#EXEC pause}</value>
+    </trigger>
+    <var name="pauserepeat">0</var>
+    <alias name="pause">
+      <value>#IF (@pauserepeat == false)
+{#VA pauserepeat true
+#SAY Pausing} {#VA pauserepeat false
+#SAY Resuming}</value>
+    </alias>
+    <alias name="repcombo" enabled="false">
+      <value>#SW (%1 == "help") { #EXEC rephelp}
+ (%match(%1, %d.%d) || %match(%1, %d))
+ {#VA unarmedcombo %-3
+#VA unarmedart %2
+#VA reptime %1
+#SAY "Now repeating "@unarmedart " " @unarmedcombo" at "@currenttarget" every "@reptime" seconds." 
+#SAY "To end, type ""repstop"". To change type ""repchange""."
+#UNTIL (%lastinput == "repstop") 
+{
+  #IF (@pauserepeat == true)
+  { 
+    #WA (3000)
+  } {
+  #exec @unarmedart @currenttarget @unarmedcombo
+  #WA (1000*@reptime+ 300)
+  }
+}
+#SAY "Repeatcommand stopped."
+}
+ (1) {#SAY "Please use the syntax REPCOMBO TIME COMBO."</value>
+    </alias>
+    <var name="unarmedcombo" enabled="false">COMBO \n</var>
+    <var name="unarmedart" enabled="false">ART</var>
+    <alias name="changecombo">
+      <value>#VA reptime %1
+#VA unarmedart %2
+#VA unarmedcombo %-3
+#SAY "Combo changed to " + @unarmedart @unarmedcombo + "every " + @reptime + " seconds."</value>
+    </alias>
+    <var name="reptime">TIME</var>
+    <alias name="reptarget">
+      <value>#SW (%1 == "help" ) {#EXEC rephelp}
+ (%match(%1, %d.%d) || %match(%1, %d))
+{
+#VA torepeat %-2
+#VA reptime %1
+#SAY Now repeating @torepeat at @currenttarget every @reptime seconds.
+#SAY To end, type repstop. To alter type repchange.
+#UNTIL (%lastinput == "repstop") 
+{
+  #IF (@pauserepeat == true)
+  { 
+    #WA (3000)
+  } {
+  #exec @torepeat @currenttarget
+  #WA (1000*@reptime + 300)
+  }
+}
+#SAY Repeatcommand stopped.
+} {
+#SAY Please use the syntax REPTARGET TIME COMMAND
+}</value>
+    </alias>
+    <var name="torepeat">slash</var>
+    <alias name="repchange">
+      <value>#SW  (%1 == "help") {#SAY "Repeater alteration command."
+#SAY "Use REPCHANGE ""time"" # to change time."
+#SAY "Use REPCHANGE ""command"" text to change command."}
+  (%1 == "time") {#IF (%match(%2, %d.%d) || %match(%2, %d)) {#VA reptime %2}}
+   ( %1 == "command" ) {#VA torepeat %-2} 
+     (%1 == "both") {#VA reptime %2; #VA torepeat %-3} 
+        (1) {#SAY "Use REPCHANGE HELP for help"}
+#SAY Currently repeating @torepeat every @reptime seconds.</value>
+    </alias>
+    <var name="casttime">3</var>
+    <alias name="rephelp">
+      <value>#SAY "Simple repeater script by Drelk"
+#SAY "REPTARGET TIME COMMAND "
+#SAY "Will repeat the line COMMAND every TIME seconds at your specified target. "
+#SAY "REPEAT TIME COMMAND "
+#SAY "Will repeat command COMMAND every TIME second. "
+#SAY "REPCOMBO  TIME ART COMBO "
+#SAY "Will repeat the specified combo at the target every TIME seconds."
+#SAY "PAUSE"
+#SAY "In all three will pause the script."
+#SAY "REPCHANGE"
+#SAY "Is used to alter the currently active repeater."
+#SAY "REPSTOP"
+#SAY "Will end the script at its next iteration. Wait after entering."
+#SAY "NOTE: Repeatedly starting repeaters will have all of them active at once."
+
+
+</value>
+    </alias>
+  </class>
+</cmud>

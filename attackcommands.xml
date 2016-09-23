@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<cmud>
+  <class name="AttackCommands">
+    <alias name="shoot">
+      <value>#IF (%-1 &lt;&gt; "") {
+  #SEND shoot %-1
+  } {
+  #IF (@CurrentTarget = "") {
+    #MXP {"You must select a target using TARGET 'target' first."}
+    } {
+    #SEND shoot @CurrentTarget
+    }
+  }</value>
+    </alias>
+    <alias name="thrust">
+      <value>#IF (%-1 &lt;&gt; "") {
+  #SEND thrust %-1
+  } {
+  #IF (@CurrentTarget == "") {
+    #MXP {"You must select a target using TARGET 'target' first."}
+    } {
+    #SEND thrust @CurrentTarget
+    }
+  }</value>
+    </alias>
+    <alias name="bash">
+      <value>#IF (%-1 &lt;&gt; "") {
+  #SEND bash %-1
+  } {
+  #IF (@CurrentTarget = "") {
+    #MXP {"You must select a target using TARGET 'target' first."}
+    } {
+    #SEND bash @CurrentTarget
+    }
+  }</value>
+    </alias>
+    <alias name="atk">
+      <value>#EXEC attack %-1</value>
+    </alias>
+  </class>
+</cmud>

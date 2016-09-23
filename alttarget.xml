@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<cmud>
+  <class name="AltTarget">
+    <var name="alttarget">wolf's chest</var>
+    <var name="temptarget">toel's chest</var>
+    <alias name="tswap">
+      <value>#VA temptarget @alttarget
+#EXEC choosealttarget @currenttarget
+#EXEC choosetarget @temptarget</value>
+    </alias>
+    <alias name="target">
+      <value>#SW (%1 == "swap") {#EXEC tswap} 
+ (%1 == "alt") {#EXEC choosealttarget %-2}
+ (1) {#EXEC choosetarget %-1}
+</value>
+    </alias>
+    <alias name="choosealttarget">
+      <value>#IF (%-1 = "") {
+  #IF (@AltTarget = "") {
+    #EXEC SystemMessage {"You currently have no alternate target.  Type TARGET 'target' to designate a target."}
+    } {
+    #EXEC SystemMessage {%concat("Your current alternate target is: ", @AltTarget")}
+    #EXEC SystemMessage {"Type TARGET ALT CLEAR to clear your target."}
+    }
+} {
+  #IF (%-1 = "clear") {
+    AltTarget = ""
+    #EXEC SystemMessage {"Your alt target has been cleared."}
+    } {
+    AltTarget = %-1
+    #EXEC SystemMessage {%concat("Your alternate target is now: ", @AltTarget)}
+    #EXEC SystemMessage {"Type TARGET ALT CLEAR to clear your target."}
+  }
+}</value>
+    </alias>
+  </class>
+</cmud>
